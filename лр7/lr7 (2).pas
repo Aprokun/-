@@ -10,23 +10,15 @@ begin
     read(arr[i]);  
 end;
 
-function recu(arr: t_arr; n: integer; var i_max: integer; i: integer) : integer;
+procedure recu(arr: t_arr; n: integer;  var i_max: integer);
 begin
-  i := i + 1;
-  if (i <= n) then
+  n := n - 1;
+  if (n > 0) then
     begin
-      recu(arr,n,i_max,i);
-      if (arr[i] > arr[i_max]) and (i_max = 1) then
+      recu(arr,n,i_max);
+      if (arr[n] > arr[i_max]) and (i_max = 1) then
         i_max := n;
-      recu := i_max;
     end;
-end;
-
-function iter_recu(arr: t_arr; n: integer; var i_max: integer) : integer;
-var i: integer;
-begin
-  i := 0;
-  iter_recu := recu(arr,n,i_max,i);
 end;
 
 var
@@ -41,8 +33,9 @@ begin
   writeln('Вводите последовательность');
   read_arr(arr,n);
   
+  n := n + 1;
   i_max := 1;
   
-  res := iter_recu(arr,n,i_max);
-  writeln('Результат:',res);
+  recu(arr,n,i_max);
+  writeln('Результат:',i_max);
 end.

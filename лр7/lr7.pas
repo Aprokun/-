@@ -10,7 +10,7 @@ begin
     read(arr[i]);  
 end; 
 
-function iter(arr: t_arr; n: integer; var i_max: integer) : integer;
+procedure iter(arr: t_arr; n: integer; var i_max: integer);
 var i: integer;
 begin
   i := 1;
@@ -20,7 +20,6 @@ begin
         i_max := i;
       i := i + 1;
     end;
-  iter := i_max;
 end;
 
 var
@@ -37,6 +36,6 @@ begin
   
   i_max := 1;
   
-  res := iter(arr,n,i_max);
-  writeln('Результат: ',res);
+  iter(arr,n,i_max);
+  writeln('Результат: ',i_max);
 end.
