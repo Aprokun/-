@@ -1,8 +1,23 @@
 ﻿const
-    days: array[0..6] of string = ('воскресенье','суббота','пятница','четверг','среда','вторник','понедельник');
-
+    days: array[1..7] of string = ('понедельник','вторник','среда','четверг','пятница','суббота','воскресенье');
 type date = record
     d, m, y, dw: integer;
+end;
+
+function isLeap(year: integer) : boolean;
+var res: boolean;
+begin
+  if (year mod 100 = 0) then
+    if (year mod 400 = 0) then
+      res := true
+    else
+      res := false
+  else
+    if (year mod 4 = 0) then
+      res := true
+    else
+      res := false;
+ isLeap := res;
 end;
 
 function days_in_month(month: integer; year: integer) : integer;
@@ -14,25 +29,37 @@ begin
   end;
   if (month = 2) then
     begin
-      if (year mod 100 = 0) then
-        if (year mod 400 = 0) then
-          res := 29
-        else
-          res := 28
-      else
-        if (year mod 4 = 0) then
-          res := 29
-        else
-          res := 28;
+      if (isLeap(year) = true) then
+        res := 29
+      else 
+        res := 28;
     end;
   days_in_month := res;
 end;
 
+function count_dw(total_d: integer; dw: integer) : integer;
+begin
+total_d := total_d mod 7;
+while (total_d <> 1) do
+  begin
+    dw := dw - 1;
+    
+    if (dw = 0) then 
+      dw := 7;
+    
+    total_d := total_d - 1;
+  end;
+  
+  count_dw := dw;  
+end;
+
 var 
   evnt: date;
-  t1, t2: integer;
+  t, cn, total_d, num_d: integer;
   
 begin
+  cn := 1;
+  
   writeln('Введите дату');
   
   write('День: '); read(evnt.d);
@@ -40,14 +67,16 @@ begin
   write('Год: '); read(evnt.y);
   write('День недели (число, где 1 - понедельник, 2 - вторник и т.д.): '); read(evnt.dw);
   
-  while evnt.m > 1 do
+  total_d := evnt.d;
+  
+  while cn < evnt.m do
     begin
-      evnt.m := evnt.m - 1;
-      t1 := days_in_month(evnt.m,evnt.y);
-      evnt.d := evnt.d + t1;
+      t := days_in_month(cn,evnt.y);
+      total_d := total_d + t;
+      cn := cn + 1;
     end;
-    
-  t2 := ((evnt.d - 1) mod 7);
-  evnt.dw := (7 + t2 - evnt.dw) mod 7;
-  write(days[evnt.dw]);
+  
+  num_d := count_dw(total_d,evnt.dw);
+  
+  writeln(days[num_d]);
 end.
