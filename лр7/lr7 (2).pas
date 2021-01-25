@@ -1,5 +1,6 @@
 ﻿const
   SIZE = 100;
+  
 type
   t_arr = array[1..SIZE] of integer;
   
@@ -13,7 +14,7 @@ end;
 procedure recu(arr: t_arr; n: integer;  var i_max: integer);
 begin
   n := n - 1;
-  if (n > 0) then
+  if (n > 1) then
     begin
       recu(arr,n,i_max);
       if (arr[n] > arr[i_max]) and (i_max = 1) then
@@ -22,9 +23,8 @@ begin
 end;
 
 var
-  n: integer;
+  n, i_max: integer;
   arr: t_arr;
-  i_max,res: integer;
   
 begin
   write('Введите размер последовательности, не превышающий 100: ');

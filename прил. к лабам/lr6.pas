@@ -18,20 +18,19 @@ begin
 end;
 
 function find_repeats(str: string) : boolean;
-var i,j: integer;
+var i, j, len: integer;
     wrd1, wrd2: string;
-    len: integer;
     res: boolean;
 begin
   res := false;
   i := 1;
   str := str + ' ';
   len := length(str);
-  while i < len do
+  while (i < len) and (res = false) do
     begin 
       wrd1 := get_word(str,i);
       j := i;
-      while (j < len) do
+      while (j < len) and (res = false) do
         begin
           wrd2 := get_word(str,j);
           if (wrd1 = wrd2) then
@@ -45,14 +44,13 @@ end;
 
 var
   str: string;
-  flag: boolean;
-  is_repeat: boolean;
+  
 begin
   writeln('Введите строку');
   read(str);
-  is_repeat := find_repeats(str);
   
-  if (is_repeat = true) then
+  if (find_repeats(str) = true) then
     writeln('В данной строке есть повторы слов')
-  else writeln('В данной строке нет повторов слов')
+  else 
+    writeln('В данной строке нет повторов слов')
 end.

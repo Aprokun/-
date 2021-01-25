@@ -1,5 +1,6 @@
 ﻿const
   SIZE = 100;
+  
 type
   t_arr = array[1..SIZE] of integer;
 
@@ -16,16 +17,15 @@ begin
   i := 1;
   while (i_max = 1) and (i <= n) do
     begin
-      if (arr[i_max] < arr[i]) then
+      if (arr[i] > arr[i_max]) then
         i_max := i;
       i := i + 1;
     end;
 end;
 
 var
-  n: integer;
+  n, i_max: integer;
   arr: t_arr;
-  i_max,res: integer;
   
 begin
   write('Введите размер последовательности, не превышающий 100: ');
