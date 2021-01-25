@@ -21,47 +21,59 @@ begin
   get_word := w;
 end;
 
-function count_vowel(w1: string; w2: string) : integer;
-var i, len:integer;
-    c: integer;
+function get_vowel(w: string) : set of char;
+var res: set of char;
+    i, len: integer;
 begin
-  len := length(w2);
+  len := length(w);
   
   for i := 1 to len do
-    if (w2[i] in w1) and (w2[i] in VOWEL) then 
-      c := c + 1; 
-  count_vowel := c;
+    if (w[i] in VOWEL) then
+      res := res + [w[i]];
+  
+  get_vowel := res;
+end;
+
+function pick_word(str: string; wv: set of char) : string;
+var j, len: integer;
+    w, res: string;
+    w2v: set of char;
+begin
+  j := 1;
+  len := length(str);
+  res := '';
+  
+  while (j < len) do
+    begin      
+      w := get_word(str,j);
+      w2v := get_vowel(w);
+      
+      if (wv = w2v) then
+        res := w;
+    end;
+   pick_word := res;
 end;
 
 procedure match_words(s1: string; s2: string);
 var
-  i, j, len1, len2, c, c_max: integer;
+  i, len: integer;
   w1, w2, res_w: string;
+  w1v, w2v: set of char;
 begin
   i := 1; 
-  j := 1;
-  len1 := length(s1);
-  len2 := length(s2);
+  len := length(s1);
   
-  while (i < len1) do
+  while (i < len) do
     begin
       w1 := get_word(s1,i);
-      while (j < len2) do
-        begin      
-          w2 := get_word(s2,j);
-          c := count_vowel(w1,w2);
-          if (c > c_max) then
-            begin
-              c_max := c;
-              res_w := w2;
-            end;
-        end;
-        j := 1;
-        c_max := 0;
-        if (res_w = '') then
-          writeln(w1,' ==== нет подходящего слова')
-        else 
-          writeln(w1,' ==== ',res_w);
+      w1v := get_vowel(w1);
+      
+      res_w := pick_word(s2,w1v);
+      if (res_w = '') then
+        writeln(w1,' ==== нет подходящего слова')
+      else 
+        writeln(w1,' ==== ',res_w);
+      res_w := '';
     end;    
 end;
 
