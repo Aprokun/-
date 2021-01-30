@@ -30,7 +30,9 @@ var a,b: t_in_arr;
     i, j: integer;
   
 begin
+  writeln('Введите 10 элементов множества а');
   read_arr(a);
+  writeln('Введите 10 элементов множества b');
   read_arr(b);
   
   for i := 1 to 10 do

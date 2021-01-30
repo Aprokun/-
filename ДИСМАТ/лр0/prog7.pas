@@ -1,4 +1,4 @@
-type t_in_arr = array[1..10] of integer;
+﻿type t_in_arr = array[1..10] of integer;
 
 procedure read_arr(var arr: t_in_arr);
 var i: integer;
@@ -22,11 +22,13 @@ var a,b: t_in_arr;
     f: boolean = true;
   
 begin
+  writeln('Введите 10 элементов множества а');
   read_arr(a);
+  writeln('Введите 10 элементов множества b');
   read_arr(b);
   
   for i := 1 to 10 do
-    if (is_elem_in(b,a[i])) and (is_elem_in(a,b[i])) and (f = true) then
+    if ((is_elem_in(b,a[i])) or (is_elem_in(a,b[i]))) and (f = true) then
       f := false;
     
   if (f = false) then
