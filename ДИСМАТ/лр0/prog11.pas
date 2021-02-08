@@ -18,17 +18,6 @@ begin
       is_elem_in := true;  
 end;
 
-procedure union_arrs(var c: t_out_arr; a: t_in_arr; b: t_in_arr);
-var i: integer;
-begin
-  for i := 1 to 10 do
-    if not(is_elem_in(b,a[i])) then
-      c[i] := a[i];
-  for i := 1 to 10 do
-    if not(is_elem_in(a,b[i])) then
-      c[i+10] := b[i];
-end;
-
 procedure print_arr(arr: t_out_arr);
 var i: integer;
 begin
@@ -36,40 +25,25 @@ begin
     write(arr[i],' ');  
 end;
 
-procedure merge(var arr: t_out_arr; first, last: integer);
-var middle, start, final, j: integer;
-    mas: t_out_arr;
+procedure sort(var arr: t_out_arr);
+var i,j,key: integer;
 begin
-  middle:=(first+last) div 2; {делим массив}
-  start:=first; {начало левой части}
-  final:=middle+1; {начало правой части}
-  for j:=first to last do {от начала до конца}
-    if (start<=middle) and ((final>last) or (arr[start]<arr[final])) then
-      begin
-        mas[j]:=arr[start];
-        inc(start);
-      end
-    else
-      begin
-        mas[j]:=arr[final];
-        inc(final);
-      end;
-      
-for j:=first to last do arr[j]:=mas[j];
-end;
-
-procedure merge_sort(var arr: t_out_arr; first, last: integer);
-begin
-if first<last then
- begin
-  merge_sort(arr, first, (first+last) div 2); {сортируем левую часть}
-  merge_sort(arr, (first+last) div 2+1, last); {сортируем правую часть}
-  merge(arr, first, last); {сливаем две части}
- end;
+  for i := 2 to 20 do
+    begin
+      key := arr[i];
+      j := i;
+      while (j > 1) and (arr[j-1] > key) do
+        begin
+          arr[j] := arr[j-1];
+          j := j - 1;
+        end;
+      arr[j] := key;  
+    end;
 end;
 
 var a,b: t_in_arr;
     c: t_out_arr;
+    i: integer;
   
 begin
   writeln('Введите 10 элементов последовательности а');
@@ -77,8 +51,15 @@ begin
   writeln('Введите 10 элементов последовательности b');
   read_arr(b);
   
-  union_arrs(c,a,b);
-  merge_sort(c,1,20);
+  for i := 1 to 10 do
+    if not(is_elem_in(b,a[i])) then
+      c[i] := a[i];
+    
+  for i := 1 to 10 do
+    if not(is_elem_in(a,b[i])) then
+      c[i+10] := b[i];
+  
+  sort(c);
     
   print_arr(c);
 end.

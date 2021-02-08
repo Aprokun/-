@@ -1,73 +1,53 @@
-﻿type t_in_arr = array[1..10] of integer;
-     t_out_arr = array[1..20] of integer;
+﻿type t_arr = array[1..20] of integer;
 
-procedure read_arr(var arr: t_in_arr);
+procedure read_arr(var arr: t_arr; n: integer);
 var i: integer;
 begin
-  for i := 1 to 10 do
+  for i := 1 to n do
     read(arr[i]);
 end;
 
-procedure union_arrs(var c: t_out_arr; a: t_in_arr; b: t_in_arr);
+procedure print_arr(var arr: t_arr; n: integer);
 var i: integer;
 begin
-  for i := 1 to 10 do
-    c[i] := a[i];
-  for i := 1 to 10 do
-    c[i+10] := b[i];
+  for i := 1 to n do
+    if (arr[i] <> 0) then
+      write(arr[i],' ');  
 end;
 
-procedure print_arr(arr: t_out_arr);
+procedure merge_sort(var arr: t_arr; left: t_arr; lpn: integer; right: t_arr; rpn: integer);
 var i: integer;
+    lp: integer = 1;
+    rp: integer = 1;
 begin
-  for i := 1 to 20 do
-    write(arr[i],' ');  
-end;
-
-procedure merge(var arr: t_out_arr; first, last: integer);
-var middle, start, final, j: integer;
-    mas: t_out_arr;
-begin
-  middle:=(first+last) div 2; {делим массив}
-  start:=first; {начало левой части}
-  final:=middle+1; {начало правой части}
-  for j:=first to last do {от начала до конца}
-    if (start<=middle) and ((final>last) or (arr[start]<arr[final])) then
+  for i := 1 to lpn+rpn do
+    if (lp <= lpn) and (left[lp] < right[rp]) then
       begin
-        mas[j]:=arr[start];
-        inc(start);
+        arr[i] := left[lp];
+        lp := lp + 1;
       end
-    else
+    else if (rp <= rpn) then
       begin
-        mas[j]:=arr[final];
-        inc(final);
+        arr[i] := right[rp];
+        rp := rp + 1;
       end;
-      
-for j:=first to last do arr[j]:=mas[j];
 end;
 
-
-procedure merge_sort(var arr: t_out_arr; first, last: integer);
-begin
-if first<last then
- begin
-  merge_sort(arr, first, (first+last) div 2); {сортируем левую часть}
-  merge_sort(arr, (first+last) div 2+1, last); {сортируем правую часть}
-  merge(arr, first, last); {сливаем две части}
- end;
-end;
-
-var a,b: t_in_arr;
-    c: t_out_arr;
+var a,b,c: t_arr;
+    an,bn: integer;
   
 begin
-  writeln('Введите 10 элементов последовательности а');
-  read_arr(a);
-  writeln('Введите 10 элементов последовательности b');
-  read_arr(b);
+  writeln('Введите кол-во элементов множества а, не превышающее 10');
+  read(an);
+  writeln('Введите элементы множества а');
+  read_arr(a,an);
   
-  union_arrs(c,a,b);
-  merge_sort(c,1,20);
+  writeln('Введите кол-во элементов множества b, не превышающее 10');
+  read(bn);
+  writeln('Введите 10 элементов множества b');
+  read_arr(b,bn);
+  
+  merge_sort(c,a,an,b,bn);
     
-  print_arr(c);
+  print_arr(c,an+bn);
 end.

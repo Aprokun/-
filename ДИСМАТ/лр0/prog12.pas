@@ -7,17 +7,14 @@ begin
     read(arr[i]);
 end;
 
-function is_elem_in(arr: t_in_arr; elem: integer; var elem_index: integer): boolean;
+function is_elem_in(arr: t_in_arr; elem: integer): boolean;
 var i: integer;
 begin
   is_elem_in := false;
   
   for i := 1 to 10 do
     if (elem = arr[i]) then
-      begin
         is_elem_in := true;
-        elem_index := i;
-      end;
 end;
 
 var a,b,t: t_in_arr;
@@ -35,10 +32,8 @@ begin
   
   while (i <= 10) and (f = true) do
     begin
-      if (is_elem_in(t,a[i],k)) then
-        t[k] := 0
-      else
-        f := false;
+      if not(is_elem_in(b,a[i])) then
+        f := false;  
       
       i := i + 1;
     end;

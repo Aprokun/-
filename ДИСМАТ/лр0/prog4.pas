@@ -1,47 +1,60 @@
-﻿type t_in_arr = array[1..10] of integer;
-     t_out_arr = array[1..20] of integer;
+﻿type  t_arr = array[1..20] of integer;
 
-procedure read_arr(var arr: t_in_arr);
+procedure read_arr(var arr: t_arr; n: integer);
 var i: integer;
 begin
-  for i := 1 to 10 do
+  for i := 1 to n do
     read(arr[i]);
 end;
 
-procedure print_arr(var arr: t_out_arr);
+procedure print_arr(var arr: t_arr; n: integer);
 var i: integer;
 begin
-  for i := 1 to 20 do
-    write(arr[i],' ');  
+  for i := 1 to n do
+    if (arr[i] <> 0) then
+      write(arr[i],' ');  
 end;
 
-function is_elem_in(arr: t_in_arr; elem: integer): boolean;
+function is_elem_in(arr: t_arr; n: integer; elem: integer): boolean;
 var i: integer;
+    f: boolean;
 begin
-  is_elem_in := false;
+  f := false;
+  i := 1;
   
-  for i := 1 to 10 do
-    if (elem = arr[i]) then
-      is_elem_in := true;  
+  while (f = false) and (i <= n) do
+    begin
+      if (elem = arr[i]) then
+        begin
+          is_elem_in := true;
+          f := true;
+        end;
+      i := i + 1;
+    end;  
 end;
 
-var a,b: t_in_arr;
-    c: t_out_arr;
+var a,b,c: t_arr;
     i, j: integer;
+    an,bn: integer;
   
 begin
-  writeln('Введите 10 элементов множества а');
-  read_arr(a);
-  writeln('Введите 10 элементов множества b');
-  read_arr(b);
+  writeln('Введите кол-во элементов множества а, не превышающее 10');
+  read(an);
+  writeln('Введите элементы множества а');
+  read_arr(a,an);
   
-  for i := 1 to 10 do
-    if not(is_elem_in(b,a[i])) then
+  writeln('Введите кол-во элементов множества b, не превышающее 10');
+  read(bn);
+  writeln('Введите 10 элементов множества b');
+  read_arr(b,bn);
+  
+  for i := 1 to an do
+    if not(is_elem_in(b,bn,a[i])) then
       c[i] := a[i];
     
-  for i := 1 to 10 do
-    if not(is_elem_in(a,b[i])) then
+  for i := 1 to bn do
+    if not(is_elem_in(a,an,b[i])) then
       c[i+10] := b[i];
   
-  print_arr(c);
+  print_arr(c,an+bn);
 end.
