@@ -33,6 +33,30 @@ begin
     end;
 end;
 
+function is_can_be_sorted(a: t_matr) : boolean;
+var i,j: byte;
+    res: boolean = true;
+begin
+  i := 1;
+
+  while (i < M) and (res = true) do
+    begin
+      j := i + 1;
+
+      while (j <= M) and (res = true) do
+        begin
+          if (a[i]^[1] = a[j]^[1]) then 
+            res := false;
+
+          j := j + 1;  
+        end;
+
+      i := i + 1;
+    end;
+
+  is_can_be_sorted := res;
+end;
+
 procedure sort(var a: t_matr);
 var i,j: byte;
     key: t_p_max_row;
@@ -70,10 +94,15 @@ create_matr(a,n);
 writeln('Ввод матрицы: ');
 read_matr(a,n);
 
-sort(a);
+if (is_can_be_sorted(a)) then
+  begin
+    sort(a);
 
-writeln('Вывод отсортированной матрицы: ');
-write_matr(a,n);
+    writeln('Вывод отсортированной матрицы: ');
+    write_matr(a,n);
+  end
+else
+  writeln('Матрица не может быть отсортирована в порядке убывания');
 
 del_matr(a,n);
 
