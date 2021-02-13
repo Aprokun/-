@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lagri/Desktop/papka s prikolom/DISMAT/lr1/code/main.c
+stdio.h
+-
+stdbool.h
+-
+stdlib.h
+-
+
