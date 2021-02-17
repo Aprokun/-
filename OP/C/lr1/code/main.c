@@ -1,72 +1,67 @@
 #include <stdio.h>
 
-int main() {
-    //ввод строки
-    char str[255];
-    printf("Input string:\n");
-    fflush(stdin);
-    gets(str);
-    printf("Inputted string: %s\n",str);
+///ввод массива
+void input_arr(float arr[], const size_t n)
+{
+    for (size_t i = 0; i < n; ++i)
+        scanf("%f",&arr[i]);
+}
 
-    //ввод символа
-    unsigned char c;
-    printf("Input symbol:\n");
-    c = getchar();
-    printf("Inputted symbol: %c\n",c);
+///выбор фрагмента (начало фрагмента и конец фрагмента) с максимальным
+///количеством идущих подряд положительных чисел.
+void slct_mx_aff_frg(const float arr[],const size_t n, int rng_arr[])
+{
+    size_t i = 0;
+    int b = 0, e = 0, max = -1;
 
-    //ввод и вывод значений каждого из базовых типов
-    float cel = 0.0f,far;
-    double speedKMH = 0.0,speedMS;
-    int val = 0, val2;
+    while ((i < n) && ((e - b) <= (n - e)))
+    {
+        if (arr[i] > 0)
+        {
+            b = e = i;
 
-    printf("Input your age:\n");
-    scanf("%d",&val);
-    val2 = val + 10;
-    printf("In 10 years you will be %d years old\n",val2);
+            while ((arr[i + 1] > 0) && (i + 1 < n))
+                e = ++i;
 
-    printf("Input temperature (Celsius):\n");
-    scanf("%f",&cel);
-    far = 1.8f * (cel + 32);
-    printf("Inputted temperature in Fahrenheits: %f\n",far);
+            if ((e - b) > max)
+            {
+                max = e - b;
+                rng_arr[0] = b;
+                rng_arr[1] = e;
+            }
+        }
 
-    printf("Input speed (km/h):\n");
-    scanf("%lf",&speedKMH);
-    speedMS = speedKMH / 3.6;
-    printf("Speed in m/s: %lf\n",speedMS);
+        i++;
+    }
+}
 
-    //ввод и вывод значений модиф.базовых типов
-    short int sval = 0;
-    unsigned long int bigval = 0;
+///вывод массива.
+void output_arr_frg(const float arr[], const size_t bgn, const size_t end)
+{
+    for (int i = bgn; i <= end; i++) {
+        printf("%2.1f ",arr[i]);
+    }
+}
 
-    printf("Input short int:\n");
-    scanf("%hd",&sval);
-    printf("Inputted short int: %hd\n",sval);
+int main()
+{
+   printf("Input length of numbers sequence\n");
+   size_t n;
+   scanf("%ud",&n);
 
-    printf("Input very big int:\n");
-    scanf("%lu",&bigval);
-    printf("Inputted very big int: %lu\n",bigval);
+   float arr[n];
+   printf("Input elements of numbers sequence\n");
+   input_arr(arr, n);
 
-    //ввод и вывод значений с использованием флагов, точности и ширины
-    unsigned short int s2num = 0;
-    long int plusnum = 0;
-    char str2[255];
-    double num = 0.0;
+   int rng_vals[] = {0, 0};
 
-    printf("Input num (0..99)\n");
-    scanf("%2hd",&s2num);
-    printf("Inputted num: %2hd\n",s2num);
+   slct_mx_aff_frg(arr, n, rng_vals);
 
-    printf("Input unsigned num. It will be output in format \"+num\"\n");
-    scanf("%ld",&plusnum);
-    printf("Inputted num: %+ld\n",plusnum);
-
-    printf("Input string\n");
-    fflush(stdin);
-    gets(str2);
-    printf("%20s\n",str2);
-
-    printf("Input real num. It will be output in format \"nnn.nn\"\n");
-    scanf("%lf",&num);
-    printf("Inputted num: %5.2lf\n",num);
-
+   if ((rng_vals[0] == 0) && (rng_vals[1] == 0) && (arr[0] < 0))
+       printf("There is no such fragment");
+   else
+   {
+       printf("Length of fragment is %u\n",(rng_vals[1]-rng_vals[0]+1));
+       output_arr_frg(arr,rng_vals[0],rng_vals[1]);
+   }
 }
