@@ -21,7 +21,7 @@ void output_arr_frg(const float a[], const size_t bgn, const size_t end)
 ///возвращает длину максимального количества идущих подряд
 ///положительных членов массива a длины n.
 ///Побочный эффект: в bgn помещается индекс начала фрагмента.
-size_t get_len_mx_amnt_pstv_elms(const float a[], const size_t n, size_t *bgn)
+size_t get_len_frag(const float a[], const size_t n, size_t *bgn)
 {
     size_t i = 0,
            b,
