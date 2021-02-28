@@ -1,77 +1,65 @@
-///Удалить в шестнадцатеричной записи данного целого числа четные цифры.
+/* Удалить в шестнадцатеричной записи данного целого числа четные цифры. */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-static char hex_digits[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
-
-void rev_str(char str[], size_t len)
+//вывод беззнакового числа num в двоичном представлении.
+void print_int_in_bin_u(unsigned int num)
 {
-    size_t i = 0, j = len - 1;
-
-    while (i < j)
+    if (num)
     {
-        char t = str[i];
-        str[i] = str[j];
-        str[j] = t;
-        i++; j--;
+        print_int_in_bin_u(num >> 1);
+        printf("%i",num & 1);
     }
 }
 
-int pow(int num, size_t degree)
+//вывод числа num в двоичном представлении.
+void print_int_in_bin(int num)
 {
-   int res = 1;
-
-   for (size_t i = 0; i < degree; i++)
-   {
-       res *= num;
-   }
-
-    return res;
-}
-
-void print_dec_in_bin(int dec_num)
-{
-    char res[255];
-    size_t i = 0;
-
-    while (dec_num > 0)
+    if (num < 0)
     {
-        if (dec_num % 2 == 0)
-        {
-            res[i] = '0';
-            ++i;
-        }
-        else
-        {
-            res[i] = '1';
-            ++i;
-        }
-
-        dec_num /= 2;
+        putchar('-');
+        print_int_in_bin_u(- (unsigned int) num);
     }
-
-    rev_str(res,i-1);
-    printf("%s\n",res);
+    else if (num > 0)
+    {
+        print_int_in_bin_u(num);
+    }
+    else
+    {
+        putchar('0');
+    }
 }
 
+// возвращает преобразованное десятичное число dec_num,
+// в шестнадцатеричной записи которого отсутствуют чётные цифры.
 int dec_to_hex_wtht_evns(int dec_num)
 {
-    int dig, i = 0, hex_num_in_dec = 0;
+    size_t i = 0;
+    int hex_num_in_dec = 0,
+        sym = 1,
+        dig;
+
+    if (dec_num < 0)
+    {
+        sym = -1;
+        dec_num *= sym;
+    }
 
     while (dec_num > 0)
     {
         dig = dec_num % 16;
 
-        if ((dig % 2 != 0) || (dig == 0))
+        if ((dig & 1) == 1)
         {
-            hex_num_in_dec += dig * pow(16, i);
+            hex_num_in_dec += dig * (1 << (4*i));
             ++i;
         }
 
-        dec_num /= 16;
+        dec_num >>= 4;
     }
+
+    hex_num_in_dec *= sym;
 
     return hex_num_in_dec;
 }
@@ -80,13 +68,25 @@ int main()
 {
     printf("Input decimal num:\n");
     int num;
-    scanf("%i", &num);
-
-    print_dec_in_bin(num);
+    scanf("%i",&num);
+    printf("Inputted num in bin\n");
+    print_int_in_bin(num);
+    printf("\n");
 
     int hex_num_in_dec = dec_to_hex_wtht_evns(num);
+    printf("Inputted num in hex:\n");
 
-    printf("Inputted decimal num in hexadecimal: %X\n",num);
-    printf("Inputted decimal num in hexadecimal without evens: %X\n",hex_num_in_dec);
-    print_dec_in_bin(hex_num_in_dec);
+    if (num < 0)
+    {
+        printf("-%X\n", -num);
+        printf("Inputted num in hex without even: -%X\n", -hex_num_in_dec);
+    }
+    else if (num > 0)
+    {
+        printf("%X\n", num);
+        printf("Inputted num in hex without even: %X\n", hex_num_in_dec);
+    }
+
+    printf("Inputted num in hex without even in bin:\n");
+    print_int_in_bin(hex_num_in_dec);
 }
