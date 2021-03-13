@@ -1,0 +1,3 @@
+C:/Users/lagri/Desktop/papka s prikolom/OP/C/lr4/4convertFunctions/cmake-build-debug/CMakeFiles/4convertFunctions.dir
+C:/Users/lagri/Desktop/papka s prikolom/OP/C/lr4/4convertFunctions/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lagri/Desktop/papka s prikolom/OP/C/lr4/4convertFunctions/cmake-build-debug/CMakeFiles/rebuild_cache.dir
