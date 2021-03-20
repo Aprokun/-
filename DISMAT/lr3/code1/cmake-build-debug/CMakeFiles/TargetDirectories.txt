@@ -1,0 +1,3 @@
+C:/Users/lagri/Desktop/-/DISMAT/lr3/code1/cmake-build-debug/CMakeFiles/code1.dir
+C:/Users/lagri/Desktop/-/DISMAT/lr3/code1/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lagri/Desktop/-/DISMAT/lr3/code1/cmake-build-debug/CMakeFiles/rebuild_cache.dir

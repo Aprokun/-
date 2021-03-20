@@ -17,30 +17,34 @@ void input_matrix(int a[][MAX], size_t p) {
     }
 }
 
-/* возвращает сумму элементов массива a размера size */
-int get_sum_line_elems(const int a[], size_t size) {
+/*
+ * возвращает сумму элементов столбца под индексом i_col
+ * матрицы a порядка size
+ */
+int get_sum_col(const int a[][MAX], size_t size, size_t i_col) {
     int sum = 0;
 
     for (size_t i = 0; i < size; i++) {
-        sum += a[i];
+        sum += a[i][i_col];
     }
 
     return sum;
 }
+
 /*
  * возвращает количество элементов, каждый из которых
- * превышает сумму остальных элементов строки, матрицы a порядка p
+ * превышает сумму остальных элементов своего столбца, матрицы a порядка p
  */
 size_t get_amount_spec_elems(const int a[][MAX], size_t p) {
     size_t res_amount = 0;
-    int curr_line_sum;
+    int curr_col_sum;
 
-    for (size_t i = 0; i < p; i++) {
-        curr_line_sum = get_sum_line_elems(a[i],p);
-        for (size_t j = 0; j < p; j++) {
-            if (a[i][j] > curr_line_sum - a[i][j]) {
+    for (size_t j = 0; j < p; j++) {
+        curr_col_sum = get_sum_col(a, p, j);
+
+        for (size_t i = 0; i < p; i++) {
+            if (a[i][j] > curr_col_sum - a[i][j])
                 res_amount++;
-            }
         }
     }
 
