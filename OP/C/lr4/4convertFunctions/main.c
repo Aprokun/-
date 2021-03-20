@@ -1,199 +1,247 @@
 #include <stdio.h>
-#include <math.h>
+#include <windows.h>
 
-/* переворот числа num */
-void numrev(int *num)
-{
-    int temp_num = 0;
-
-    while (*num > 0)
-    {
-        temp_num = temp_num * 10 + *num % 10;
-        *num /= 10;
-    }
-
-    *num = temp_num;
-}
-/* запись числа num в строку str */
-void itos(const int num, char str[])
-{
-    int tnum = num;
-    size_t i = 0;
-
-    if (tnum < 0)
-    {
-        tnum = -tnum;
-        str[i] = '-';
-        i++;
-    }
-
-    numrev(&tnum);
-
-    while (tnum > 0)
-    {
-        str[i] = tnum % 10 + '0';
-        tnum /= 10;
-        i++;
-    }
-
-    str[i] = '\0';
+/* возврат длины строки str */
+int slen(char *str) {
+    int i = 0;
+    while (*str++ != '\0') i++;
+    return (i);
 }
 
-/* возвращает число, извлечённое из строки str */
-int stoi(const char *str)
-{
-    int sign = 1,
-        num = 0;
+/* переворот строки str */
+void rev_str(char *str) {
+    char c;
+    int i = 0;
+    int j = slen(str) - 1;
+    while (i < j) {
+        c = str[i];
+        str[i] = str[j];
+        str[j] = c;
+        i++; j--;
+    }
+}
 
-    while (*str == ' ' || *str == ',') str++;
+/* запись целого числа num в строку str */
+char * itos(int num, char *str) {
+    int sign = 1;
+    char *p = str;
 
-    if (*str == '-')
-    {
+    if (num < 0) {
+        num = -num;
+        sign = -1;
+    }
+
+    while (num > 0) {
+        *str++ = num % 10 + '0';
+        num /= 10;
+    }
+
+    if (sign == -1)
+        *str++ = '-';
+
+    *str = '\0';
+
+    rev_str(p);
+    return(p);
+}
+
+/* извлечение целого числа из строки str */
+int stoi(const char* str) {
+    while ((*str <= ' ') && (*str > '\0'))
+        ++str;
+
+    int n = 0;
+    int sign = 1;
+
+    if (*str == '-') {
         sign = -1;
         str++;
-    }
-
-    while ((*str != ' ') && (*str != '\0'))
-    {
-        num = num * 10 + (*str - '0');
+    } else if (*str == '+')
         str++;
+
+    while ((*str >= '0') && (*str <= '9')) {
+        n = n * 10 + *str - '0';
+        ++str;
     }
 
-    num *= sign;
-
-    return num;
+    return (n * sign);
 }
 
-/* запись вещественного числа num в строку str */
-void ftos(const double num, char str[])
-{
-    size_t i = 0, k = 0, presc = 6;
-    double tnum = num;
+/* возведение 10 в степень p */
+float powf_(int p) {
+    float f = 1;
 
-    if (tnum < 0)
-    {
-        str[i] = '-';
-        tnum = -tnum;
-        i++;
-    }
-
-    //приведение числа к нормализованному виду
-    while ((int)tnum > 0)
-    {
-        tnum /= 10;
-        k++;
-    }
-
-    tnum *= 10;
-
-    for ( ; k; tnum *= 10)
-    {
-        str[i] = (int)tnum + '0';
-
-        i++; k--;
-
-        if (k == 0)
-        {
-            str[i] = '.';
-            i++;
+    if (p > 0)
+        while (p != 0) {
+            --p;
+            f *= 10;
+        }
+    else
+        while (p != 0) {
+            ++p;
+            f /= 10;
         }
 
-        tnum -= (int)tnum;
-    }
-
-    for (size_t j = 0; j < presc; j++)
-    {
-        str[i] = (int)tnum + '0';
-
-        i++;
-
-        tnum -= (int)tnum;
-        tnum *= 10;
-    }
-
-    str[i] = '\0';
+    return f;
 }
 
-/* возвращает вещественное число, извлечённое из строки str */
-double stof(char *str)
-{
+/* извлечение вещественного числа из строки str */
+float stof(char* str) {
+    while ((*str <= ' ') && (*str > '\0'))
+        ++str;
+
     int sign = 1;
-    size_t k = 0;
-    double num = 0;
 
-    while (*str == ' ' || *str == ',') str++;
-
-    if (*str == '-')
-    {
+    if (*str == '-') {
         sign = -1;
         str++;
-    }
-
-    while (*str != '.')
-    {
-        num = num * 10 + (*str - '0');
+    } else if (*str == '+')
         str++;
+
+    int a = 0;
+
+    while ((*str >= '0') && (*str <= '9')) {
+        a = a * 10 + (*str - '0');
+        ++str;
     }
 
-    str++;
+    int k = 0;
 
-    while (*str != ',' && *str != '\0')
-    {
-        num = num * 10 + (*str - '0');
-        k++;
+    if (*str == '.') {
         str++;
+        while ((*str >= '0') && (*str <= '9')) {
+            ++k;
+            a = a * 10 + *str - '0';
+            ++str;
+        }
     }
 
-    num /= (pow(10,k));
+    int p = 0;
 
-    num *= sign;
+    if ((*str == 'e') || (*str == 'E')) {
+        str++;
 
-    return num;
+        while ((*str >= '0') && (*str <= '9')) {
+            p = p * 10 + *str - '0';
+            ++str;
+        }
+    }
+
+    int l = p - k;
+
+    if (l < 0)
+        return ((a * sign) / powf_(-l));
+    else
+        return (a * sign * powf_(l));
+}
+
+/* конкатенация строк str и add_s */
+char * strcat_(char *str, char *add_s) {
+    char *p = str;
+
+    while (*str != '\0')
+        ++str;
+
+    while (*add_s != '\0') {
+        *str = *add_s;
+        ++str;
+        ++add_s;
+    }
+
+    *str = '\0';
+    return p;
+}
+
+/* получение нормальной формы вещественного числа f */
+float normalize(float f, int* r) {
+    float sign = 1;
+
+    if (f < 0) {
+        sign = -1;
+        f = -f;
+    }
+
+    int rank = 0;
+
+    while (f > 10) {
+        f /= 10;
+        ++rank;
+    }
+
+    while ((f < 10) && (f != 0)) {
+        f *= 10;
+        --rank;
+    }
+
+    *r = rank;
+    return (sign * f);
+}
+
+/* запись вещественного числа f в строку str */
+char * ftos(float f, char* str) {
+    char *p = str;
+
+    if (f < 0) {
+        *str++ = '-';
+        f = -f;
+    }
+
+    int r = 0;
+    f = normalize(f, &r);
+
+    int digit = (int) f;
+    *str++ = digit + '0';
+    f = f * 10;
+    *str++ = '.';
+
+    for (int i = 1; i < 6; ++i, f = f * 10) {
+        int digit = (int)f % 10;
+        *str++ = digit + '0';
+    }
+
+    *str++ = 'e';
+    *str = '\0';
+    char sr[255];
+    itos(r, sr);
+
+    strcat_ (str, sr);
+    return (p);
 }
 
 int main() {
-    printf("1.Convert string to int\n"
-           "2.Convert int to string\n"
-           "3.Convert float to string\n"
-           "4.Convert string to float\n");
-    size_t v;
+    system("chcp 65001");
+    int num_i, v;
+    float num_d;
+    char s[255];
 
-    scanf("%ud",&v);
+    printf("Выберите операцию:\n"
+           "1.Перевод целого в строку\n"
+           "2.Перевод вещественного в строку\n"
+           "3.Перевод строки в целое\n"
+           "4.Перевод строки в вещественное\n");
+    scanf("%d", &v);
 
-    switch (v) {
-        case 1:
-            printf("Input string\n");
-
-            char str_i[255];
-            scanf("%s", str_i);
-
-            printf("%d", stoi(str_i));
-            break;
-        case 2:
-            printf("Input int\n");
-
-            int num_i; char str1[255];
-            scanf("%d", &num_i);
-
-            itos(num_i, str1);
-            printf("%s", str1);
-            break;
-        case 3:
-            printf("Input float\n");
-
-            double num_d; char str2[255];
-            scanf("%lf", &num_d);
-
-            ftos(num_d, str2);
-            printf("%s", str2);
-            break;
-        case 4:
-            printf("Input string\n");
-
-            char str_f[255];
-            scanf("%s", str_f);
-            stof(str_f);
-
-            printf("%lf", stof(str_f));
-    }
+        switch (v)
+        {
+            case 1:
+                printf("\nВведите целое число: ");
+                scanf(" %i", &num_i);
+                printf("Ваша строка с целым числом: \"%s\"", itos(num_i, s));
+                break;
+            case 2:
+                printf("\nВведите вещественное число: ");
+                scanf(" %f", &num_d);
+                printf("Ваша строка с вещественным числом: \"%s\"", ftos(num_d, s));
+                break;
+            case 3:
+                printf("\nВведите строку с целым числом: ");
+                scanf("%s", s);
+                printf("Ваше целое число: %i", stoi(s));
+                break;
+            case 4:
+                printf("\nВведите строку с вещественным числом: ");
+                scanf("%s", s);
+                printf("Ваше вещественное число: %f", stof(s));
+                break;
+        }
 }

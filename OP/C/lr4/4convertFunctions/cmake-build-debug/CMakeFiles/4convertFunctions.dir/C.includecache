@@ -9,8 +9,6 @@
 C:/Users/lagri/Desktop/papka s prikolom/OP/C/lr4/4convertFunctions/main.c
 stdio.h
 -
-math.h
--
-malloc.h
+windows.h
 -
 

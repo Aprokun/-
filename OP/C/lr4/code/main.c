@@ -7,20 +7,20 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
 
-
-// считывает вещественные числа из строки str и
-// выводит их с тремя знаками после точки.
-void printNums_fromStr_d(char *str)
+/* считывает вещественные числа из строки str и
+    выводит их с тремя знаками после точки. */
+void print_nums_from(char *str)
 {
-    int sign = 1;
-    size_t k = 0;
-    double num = 0;
+    int sign, psign, k, p;
+    double num;
 
     while (*str != '\0')
     {
+        sign = 1, psign = 1,
+        k = 0, p = 0, num = 0;
+
         while (*str == ' ' || *str == ',') str++;
 
         if (*str == '-')
@@ -28,29 +28,48 @@ void printNums_fromStr_d(char *str)
             sign = -1;
             str++;
         }
+        else if (*str == '+')
+            str++;
 
-        while (*str != '.')
+        while (*str >= '0' && *str <= '9')
         {
             num = num * 10 + (*str - '0');
             str++;
         }
 
-        str++;
-
-        while (*str != ',' && *str != '\0')
-        {
-            num = num * 10 + (*str - '0');
-            k++;
+        if (*str == '.') {
             str++;
+            while ((*str >= '0') && (*str <= '9')) {
+                ++k;
+                num = num * 10 + *str - '0';
+                ++str;
+            }
         }
 
-        num /= (pow(10,k));
+        if ((*str == 'e') || (*str == 'E')) {
+            str++;
 
-        num *= sign;
+            if (*str == '-') {
+                psign = -1;
+                str++;
+            }
+
+            while ((*str >= '0') && (*str <= '9')) {
+                p = p * 10 + *str - '0';
+                ++str;
+            }
+
+            p *= psign;
+        }
+
+        int l = p - k;
+
+        if (l < 0)
+            num = (num * sign) / pow(10, -l);
+        else
+            num = num * sign * pow(10, l);
 
         printf("%.3lf ", num);
-
-        num = 0; k = 0;
     }
 }
 
@@ -58,5 +77,5 @@ int main()
 {
     char str[255];
     gets(str);
-    printNums_fromStr_d(str);
+    print_nums_from(str);
 }
