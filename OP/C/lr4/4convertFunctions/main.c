@@ -9,7 +9,7 @@ int slen(char *str) {
 }
 
 /* переворот строки str */
-void rev_str(char *str) {
+char * rev_str(char *str) {
     char c;
     int i = 0;
     int j = slen(str) - 1;
