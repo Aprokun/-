@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lagri/libs/set/library.c
+stdio.h
+-
+stdlib.h
+-
+math.h
+-
+
+C:/Users/lagri/libs/set/main.c
+stdio.h
+-
+
