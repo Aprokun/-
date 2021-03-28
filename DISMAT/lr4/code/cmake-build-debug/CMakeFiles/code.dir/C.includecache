@@ -6,15 +6,9 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/lagri/libs/set/library.c
+C:/Users/lagri/Desktop/-/DISMAT/lr4/code/main.c
 stdio.h
 -
 stdlib.h
--
-math.h
--
-
-C:/Users/lagri/libs/set/main.c
-stdio.h
 -
 

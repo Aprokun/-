@@ -1,3 +1,3 @@
-C:/Users/lagri/libs/set/cmake-build-debug/CMakeFiles/set.dir
-C:/Users/lagri/libs/set/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/lagri/libs/set/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/lagri/Desktop/-/CLibs/set/cmake-build-debug/CMakeFiles/set.dir
+C:/Users/lagri/Desktop/-/CLibs/set/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lagri/Desktop/-/CLibs/set/cmake-build-debug/CMakeFiles/rebuild_cache.dir

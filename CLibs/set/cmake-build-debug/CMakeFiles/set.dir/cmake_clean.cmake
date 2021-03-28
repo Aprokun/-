@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/set.dir/library.c.obj"
+  "CMakeFiles/set.dir/set.c.obj"
   "libset.dll"
   "libset.dll.a"
   "libset.dll.manifest"

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "C:/Users/lagri/libs/set/library.c" "C:/Users/lagri/libs/set/cmake-build-debug/CMakeFiles/set.dir/library.c.obj"
+  "C:/Users/lagri/Desktop/-/CLibs/set/set.c" "C:/Users/lagri/Desktop/-/CLibs/set/cmake-build-debug/CMakeFiles/set.dir/set.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 
