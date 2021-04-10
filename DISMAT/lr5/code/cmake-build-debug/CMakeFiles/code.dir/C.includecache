@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/lagri/Desktop/-/DISMAT/lr5/code/main.c
+stdio.h
+-
+stdlib.h
+-
+
+C:/Users/lagri/Desktop/-/DISMAT/lr5/code/subset.c
+stdio.h
+-
+
