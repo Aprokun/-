@@ -9,54 +9,58 @@
 #include <stdio.h>
 #include <math.h>
 
-/* считывает вещественные числа из строки str и
+/* считывает вещественные числа из потока ввода и
     выводит их с тремя знаками после точки. */
-void print_nums_from(char *str)
+void print_nums_from()
 {
-    int sign, psign, k, p;
+    int sign, psign, k, p, i = 0;
     double num;
+    char c;
+    char str[255];
 
-    while (*str != '\0')
+    gets(str);
+
+    while (str[i] != '\0')
     {
         sign = 1, psign = 1,
         k = 0, p = 0, num = 0;
 
-        while (*str == ' ' || *str == ',') str++;
+        while (str[i] == ' ' || str[i] == ',') i++;
 
-        if (*str == '-')
+        if (str[i] == '-')
         {
             sign = -1;
-            str++;
+            i++;
         }
-        else if (*str == '+')
-            str++;
+        else if (str[i] == '+')
+            i++;
 
-        while (*str >= '0' && *str <= '9')
+        while (str[i] >= '0' && str[i] <= '9')
         {
-            num = num * 10 + (*str - '0');
-            str++;
+            num = num * 10 + (str[i] - '0');
+            i++;
         }
 
-        if (*str == '.') {
-            str++;
-            while ((*str >= '0') && (*str <= '9')) {
+        if (str[i] == '.') {
+            i++;
+            while ((str[i] >= '0') && (str[i] <= '9')) {
                 ++k;
-                num = num * 10 + *str - '0';
-                ++str;
+                num = num * 10 + str[i] - '0';
+                i++;
             }
         }
 
-        if ((*str == 'e') || (*str == 'E')) {
-            str++;
+        if ((str[i] == 'e') || (str[i] == 'E')) {
+            i++;
 
-            if (*str == '-') {
+            if (str[i] == '-') {
                 psign = -1;
-                str++;
+                i++;
             }
 
-            while ((*str >= '0') && (*str <= '9')) {
-                p = p * 10 + *str - '0';
-                ++str;
+            while ((str[i] >= '0') && (str[i] <= '9')) {
+                p = p * 10 + str[i] - '0';
+                i++;
             }
 
             p *= psign;
@@ -75,7 +79,5 @@ void print_nums_from(char *str)
 
 int main()
 {
-    char str[255];
-    gets(str);
-    print_nums_from(str);
+    print_nums_from();
 }

@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #define MAX 100
 
-/* ввод матрицы a порядка p */
+/* ввод матрицы a размера pxp */
 void input_matrix(int a[][MAX], size_t p) {
     for (size_t i = 0; i < p; i++) {
         for (size_t j = 0; j < p; j++) {
@@ -18,8 +18,8 @@ void input_matrix(int a[][MAX], size_t p) {
 }
 
 /*
- * возвращает сумму элементов столбца под индексом i_col
- * матрицы a порядка size
+ * возвращает сумму элементов столбца с индексом i_col
+ * матрицы a строк size
  */
 int get_sum_col(const int a[][MAX], size_t size, size_t i_col) {
     int sum = 0;
@@ -33,7 +33,7 @@ int get_sum_col(const int a[][MAX], size_t size, size_t i_col) {
 
 /*
  * возвращает количество элементов, каждый из которых
- * превышает сумму остальных элементов своего столбца, матрицы a порядка p
+ * превышает сумму остальных элементов своего столбца, матрицы a размера pxp
  */
 size_t get_amount_spec_elems(const int a[][MAX], size_t p) {
     size_t res_amount = 0;
@@ -57,7 +57,7 @@ int main() {
     scanf("%u", &p);
 
     printf("Input matrix elements\n");
-    int a[MAX][MAX];
+    int a[p][p];
     input_matrix(a, p);
     size_t res = get_amount_spec_elems(a, p);
 

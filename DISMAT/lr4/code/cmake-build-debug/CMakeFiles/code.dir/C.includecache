@@ -6,9 +6,11 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/lagri/Desktop/-/DISMAT/lr4/code/main.c
+C:/Users/lagri/Desktop/papka s prikolom/DISMAT/lr4/code/main.c
 stdio.h
 -
 stdlib.h
+-
+math.h
 -
 

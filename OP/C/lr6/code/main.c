@@ -22,18 +22,16 @@ char * rev_str(char *s) {
     return p;
 }
 
-/* возвращает "истину", если слово w - палиндром, иначе - "ложь" */
-int is_palindrom(char *w) {
-    char *revw = rev_str(w);
+/* возвращает "истину", если строка s1 равна строке s2, иначе - "ложь" */
+int is_str_equals(char *s1, char *s2) {
     int res = 1;
 
-    while (*w != '\0' && *revw != '\0') {
-        if (*w != *revw)
+    while (*s1 != '\0' || *s2 != '\0') {
+        if (*s1 != *s2)
             res = 0;
-        w++; revw++;
+        s1++; s2++;
     }
 
-    free(revw);
     return res;
 }
 
@@ -52,7 +50,9 @@ size_t get_amount_palindroms_wth_a(char *s) {
         }
         w[i] = '\0';
 
-        if (*w == 'a' && is_palindrom(w)) res++;
+        char *revw = rev_str(w);
+
+        if (*w == 'a' && is_str_equals(w, revw)) res++;
     }
 
     return res;

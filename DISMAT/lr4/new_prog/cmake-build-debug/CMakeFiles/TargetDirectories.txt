@@ -1,0 +1,3 @@
+C:/Users/lagri/Desktop/papka s prikolom/DISMAT/lr4/new_prog/cmake-build-debug/CMakeFiles/new_prog.dir
+C:/Users/lagri/Desktop/papka s prikolom/DISMAT/lr4/new_prog/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/lagri/Desktop/papka s prikolom/DISMAT/lr4/new_prog/cmake-build-debug/CMakeFiles/rebuild_cache.dir

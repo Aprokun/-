@@ -10,9 +10,19 @@ struct set {
     int max;
 };
 
+int is_elem_in(struct set *s, int elem) {
+    int *a = s->values;
+
+    if (a[elem] == 1) {
+        return 1;
+    }
+
+    return 0;
+}
+
 struct set create_set(int min, int max) {
     int n = max - min,
-            *a = (int *)calloc(sizeof(int), n);
+            *a = (int *) calloc(sizeof(int), n);
     struct set temp;
 
     temp.max = max;
@@ -41,8 +51,7 @@ struct set complemept_set(struct set *s) {
 }
 
 void output_set(struct set *s) {
-    int *values = s->values,
-            n = s->max - s->min;
+    int *values = s->values;
 
     printf("{ ");
 
@@ -61,6 +70,14 @@ void add(struct set *s, int value) {
     values[value] = 1;
 }
 
+void delete(struct set *s, int value) {
+    int *values = s->values;
+
+    if (values[value] == 1) {
+        values[value] = 0;
+    }
+}
+
 struct set union_set(struct set *s1, struct set *s2) {
     int new_min = MIN(s1->min, s2->min),
             new_max = MAX(s1->max, s2->max),
@@ -77,7 +94,8 @@ struct set union_set(struct set *s1, struct set *s2) {
         if (t[i] == 0) t[i] = b[i];
     }
 
-    temp.max = new_max; temp.min = new_min;
+    temp.max = new_max;
+    temp.min = new_min;
     return temp;
 }
 
@@ -93,17 +111,20 @@ struct set intersection_set(struct set *s1, struct set *s2) {
             t[i] = 1;
     }
 
-    temp.max = new_max; temp.min = new_min;
+    temp.max = new_max;
+    temp.min = new_min;
     return temp;
 }
 
 int is_subset(struct set *s1, struct set *s2) {
-    int *a = s1->values,
-            *b = s2->values;
+    int *a = s2->values;
 
     for (int i = s2->min; i < s2->max; i++) {
-        if (b[i] != a[i])
-            return 0;
+        if (a[i] == 1) {
+            if ((!is_elem_in(s1, i))) {
+                return 0;
+            }
+        }
     }
 
     return 1;
@@ -123,7 +144,8 @@ struct set subtraction_set(struct set *s1, struct set *s2) {
         } else t[i] = a[i];
     }
 
-    temp.min = s1->min; temp.max = s1->max;
+    temp.min = s1->min;
+    temp.max = s1->max;
     return temp;
 }
 
@@ -134,7 +156,8 @@ struct set sym_subtraction(struct set *s1, struct set *s2) {
     t2 = subtraction_set(s2, s1);
     temp = union_set(&t1, &t2);
 
-    delete_set(&t1); delete_set(&t2);
+    delete_set(&t1);
+    delete_set(&t2);
 
     return temp;
 }
@@ -147,11 +170,31 @@ struct set get_set_from_array(int min, int max, const int *a, int n) {
         t[a[i]] = 1;
     }
 
-    temp.max = max; temp.min = min;
+    temp.max = max;
+    temp.min = min;
     return temp;
 }
 
-struct set complemept_set(struct set *pSet);
+void print_set_of_solves(struct set *s, struct set *emp) {
+    int *a = s->values, r;
+
+    for (int i = 0; i < 10; ++i) {
+        if (a[i] == 0) {
+            continue;
+        } else
+            r = i;
+
+        if (is_subset(s, emp) && is_subset(emp, s)) {
+            output_set(emp);
+        } else {
+            add(emp, r);
+            delete(s, r);
+            print_set_of_solves(s, emp);
+        }
+
+
+    }
+}
 
 int main() {
     struct set t1, t2, t3, t4, t5, t6, t7, te1, res_emp, res_uni,
@@ -162,22 +205,28 @@ int main() {
             c = create_set(1, 10);
 
     //init U - universum
-    for (int i = 1; i <= 11 ; ++i) {
+    for (int i = 1; i <= 11; ++i) {
         add(&u, i);
     }
 
     //init A
-    add(&a, 3); add(&a, 7);
-    add(&a, 9); add(&a, 10);
+    add(&a, 3);
+    add(&a, 7);
+    add(&a, 9);
+    add(&a, 10);
 
     //init B
-    add(&b, 1); add(&b, 3);
-    add(&b, 8); add(&b, 9);
+    add(&b, 1);
+    add(&b, 3);
+    add(&b, 8);
+    add(&b, 9);
     add(&b, 10);
 
     //init C
-    add(&c, 2); add(&c, 4);
-    add(&c, 5); add(&c, 6);
+    add(&c, 2);
+    add(&c, 4);
+    add(&c, 5);
+    add(&c, 6);
     add(&c, 7);
 
 
@@ -197,11 +246,17 @@ int main() {
     t7 = sym_subtraction(&t4, &t5);
     res_emp = sym_subtraction(&t6, &t7);
 
-    printf("fi^empty = "); output_set(&res_emp);
+    printf("fi^empty = ");
+    output_set(&res_emp);
 
-    delete_set(&te1); delete_set(&t1); delete_set(&t2);
-    delete_set(&t3); delete_set(&t4); delete_set(&t5);
-    delete_set(&t6); delete_set(&t7);
+    delete_set(&te1);
+    delete_set(&t1);
+    delete_set(&t2);
+    delete_set(&t3);
+    delete_set(&t4);
+    delete_set(&t5);
+    delete_set(&t6);
+    delete_set(&t7);
 
     printf("\n");
 
@@ -222,11 +277,17 @@ int main() {
     res_uni = sym_subtraction(&t6, &t7);
     res_uni = complemept_set(&res_uni);
 
-    printf("fi^u = "); output_set(&res_uni);
+    printf("fi^u = ");
+    output_set(&res_uni);
 
-    delete_set(&te1); delete_set(&t1); delete_set(&t2);
-    delete_set(&t3); delete_set(&t4); delete_set(&t5);
-    delete_set(&t6); delete_set(&t7);
+    delete_set(&te1);
+    delete_set(&t1);
+    delete_set(&t2);
+    delete_set(&t3);
+    delete_set(&t4);
+    delete_set(&t5);
+    delete_set(&t6);
+    delete_set(&t7);
 
     printf("\n");
 
@@ -242,10 +303,9 @@ int main() {
             output_set(&res_emp);
             printf("}\n");
             printf("Its power is 1");
-        } else {
-            //TODO: дописать реализацию для непустого множества
         }
-    }
+
+    } else printf("No any sets");
 
 
 }
