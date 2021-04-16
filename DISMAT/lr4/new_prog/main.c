@@ -3,6 +3,9 @@
 
 #define MIN(a, b) (a < b ? a : b)
 #define MAX(a, b) (a > b ? a : b)
+#define SOLVES 1
+
+static int sv = 0;
 
 struct set {
     int *values;
@@ -33,18 +36,20 @@ struct set create_set(int min, int max) {
     return temp;
 }
 
+struct set a, b, c, x;
+
 void delete_set(struct set *s) {
     free(s->values);
     free(s);
 }
 
 struct set complemept_set(struct set *s) {
-    int *a = s->values;
+    int *av = s->values;
     struct set temp = create_set(s->min, s->max);
-    int *b = temp.values;
+    int *bv = temp.values;
 
     for (int i = s->min; i <= s->max; i++) {
-        b[i] = (a[i] == 0 ? 1 : 0);
+        bv[i] = (av[i] == 0 ? 1 : 0);
     }
 
     return temp;
@@ -81,17 +86,17 @@ void delete(struct set *s, int value) {
 struct set union_set(struct set *s1, struct set *s2) {
     int new_min = MIN(s1->min, s2->min),
             new_max = MAX(s1->max, s2->max),
-            *a = s1->values,
-            *b = s2->values;
+            *av = s1->values,
+            *bv = s2->values;
     struct set temp = create_set(new_min, new_max);
     int *t = temp.values;
 
     for (int i = s1->min; i < s1->max; i++) {
-        if (t[i] == 0) t[i] = a[i];
+        if (t[i] == 0) t[i] = av[i];
     }
 
     for (int i = s2->min; i < s2->max; i++) {
-        if (t[i] == 0) t[i] = b[i];
+        if (t[i] == 0) t[i] = bv[i];
     }
 
     temp.max = new_max;
@@ -102,12 +107,12 @@ struct set union_set(struct set *s1, struct set *s2) {
 struct set intersection_set(struct set *s1, struct set *s2) {
     int new_min = MAX(s1->min, s2->min),
             new_max = MIN(s1->max, s2->max),
-            *a = s1->values, *b = s2->values;
+            *av = s1->values, *bv = s2->values;
     struct set temp = create_set(new_min, new_max);
     int *t = temp.values;
 
     for (int i = new_min; i < new_max; i++) {
-        if ((a[i] == 1) && (b[i] == 1))
+        if ((av[i] == 1) && (bv[i] == 1))
             t[i] = 1;
     }
 
@@ -117,10 +122,10 @@ struct set intersection_set(struct set *s1, struct set *s2) {
 }
 
 int is_subset(struct set *s1, struct set *s2) {
-    int *a = s2->values;
+    int *av = s2->values;
 
     for (int i = s2->min; i < s2->max; i++) {
-        if (a[i] == 1) {
+        if (av[i] == 1) {
             if ((!is_elem_in(s1, i))) {
                 return 0;
             }
@@ -131,17 +136,17 @@ int is_subset(struct set *s1, struct set *s2) {
 }
 
 struct set subtraction_set(struct set *s1, struct set *s2) {
-    int *a = s1->values,
-            *b = s2->values;
+    int *av = s1->values,
+            *bv = s2->values;
     struct set temp = create_set(s1->min, s1->max);
     int *t = temp.values;
 
     for (int i = s1->min; i < s2->max; i++) {
         if (s2->min <= i && i <= s2->max) {
-            if (a[i] == 1 && b[i] == 1) {
+            if (av[i] == 1 && bv[i] == 1) {
                 t[i] = 0;
-            } else t[i] = a[i];
-        } else t[i] = a[i];
+            } else t[i] = av[i];
+        } else t[i] = av[i];
     }
 
     temp.min = s1->min;
@@ -162,12 +167,12 @@ struct set sym_subtraction(struct set *s1, struct set *s2) {
     return temp;
 }
 
-struct set get_set_from_array(int min, int max, const int *a, int n) {
+struct set get_set_from_array(int min, int max, const int *arr, int n) {
     struct set temp = create_set(min, max);
     int *t = temp.values;
 
     for (int i = 0; i < n; ++i) {
-        t[a[i]] = 1;
+        t[arr[i]] = 1;
     }
 
     temp.max = max;
@@ -176,10 +181,10 @@ struct set get_set_from_array(int min, int max, const int *a, int n) {
 }
 
 void print_set_of_solves(struct set *s, struct set *emp) {
-    int *a = s->values, r;
+    int *av = s->values, r;
 
     for (int i = 0; i < 10; ++i) {
-        if (a[i] == 0) {
+        if (av[i] == 0) {
             continue;
         } else
             r = i;
@@ -196,41 +201,86 @@ void print_set_of_solves(struct set *s, struct set *emp) {
     }
 }
 
-int solve(struct set *a, struct set *b, struct set *c, struct set *x) {
+int is_solve(int d[]) {
     struct set t1, t2, t3, t4, com_x,
-               t5, t6, t7;
+            t5, t6, t7, x_ = create_set(1, 10);
 
-    com_x = complemept_set(x);
+    x_.values = d;
+    x.min = 1;
+    x.max = 10;
 
-    t1 = subtraction_set(c, x);
+    com_x = complemept_set(&x_);
 
-    t2 = subtraction_set(a, &com_x);
+    t1 = subtraction_set(&c, &x_);
+
+    t2 = subtraction_set(&a, &com_x);
     t3 = complemept_set(&t2);
 
     t4 = sym_subtraction(&t1, &t3);
 
 
-    t5 = subtraction_set(a, x);
+    t5 = subtraction_set(&a, &x_);
 
-    t6 = intersection_set(b, x);
+    t6 = intersection_set(&b, &x_);
 
     t7 = sym_subtraction(&t5, &t6);
 
+    delete_set(&t1);
+    delete_set(&t2);
+    delete_set(&t3);
+    delete_set(&t5);
+    delete_set(&t6);
+    delete_set(&x_);
+
     if (is_subset(&t7, &t4) && is_subset(&t4, &t7)) {
+        delete_set(&t4);
+        delete_set(&t7);
         return 1;
     }
 
     return 0;
 }
 
-int main() {
-    struct set u = create_set(1, 10),
-            e = create_set(1, 10),
-            a = create_set(1, 10),
-            b = create_set(1, 10),
-            c = create_set(1, 10);
+void output_array_with_mask(const int mask[]) {
+    int is_empty = 1;
 
-    struct set t1, t2, t3, t4, com_x, t5, t6, t7;
+    printf("{");
+    for (int i = 1; i <= 10; i++) {
+        if (mask[i]) {
+            printf("%d, ", i);
+            is_empty = 0;
+        }
+    }
+
+    if (is_empty)
+        printf("}\n");
+    else
+        printf("\b\b}\n");
+}
+
+void solve(struct set *x_, int i, int n) {
+    static int d[11];
+
+    for (int m = 0; m < 2; ++m) {
+        d[i] = m;
+
+        if (i == n) {
+            if (is_solve(d) && sv != SOLVES) {
+                output_array_with_mask(d);
+                sv++;
+            }
+        } else {
+            solve(x_, i + 1, n);
+        }
+    }
+}
+
+int main() {
+
+    a = create_set(1, 10),
+    b = create_set(1, 10),
+    c = create_set(1, 10),
+    x = create_set(1, 10);
 
     //init A
     add(&a, 3);
@@ -252,45 +302,48 @@ int main() {
     add(&c, 6);
     add(&c, 7);
 
+    //  solve(&x, 1, 10);
 
-    for (int i = 0; i < 1024; ++i) {
-        struct set x = create_set(1, 10);
+    printf("How much solves do you want to check?\n");
+    int n;
+    scanf("%d", &n);
 
-        for (int j = 0; j < 10; j++) {
-            if (i & (1 << j)) {
-                add(&x, j);
+    for (int i = 0; i < n; ++i) {
+        printf("How much numbers contains this set?\n");
+        int m;
+        scanf("%d", &m);
+
+        int d[10];
+
+        for (int j = 1; j <= 10; ++j) {
+            d[j] = 0;
+        }
+
+        printf("Input numbers\n");
+        for (int j = 0; j < m; ++j) {
+            int num;
+            scanf("%d", &num);
+            d[num] = 1;
+        }
+
+        if (is_solve(d)) {
+            for (int j = 1; j <= 10; ++j) {
+                if (d[j] == 1) {
+                    printf("%d ", j);
+                }
             }
-        }
-//ex1
-        com_x = complemept_set(&x);
-
-        t1 = subtraction_set(&c, &x);
-
-        t2 = subtraction_set(&a, &com_x);
-        t3 = complemept_set(&t2);
-
-        t4 = sym_subtraction(&t1, &t3);
-
-        delete_set(&t1);
-        delete_set(&t2);
-        delete_set(&t3);
-        delete_set(&t4);
-        delete_set(&com_x);
-
-//ex2
-        t5 = subtraction_set(&a, &x);
-
-        t6 = intersection_set(&b, &x);
-
-        t7 = sym_subtraction(&t5, &t6);
-
-        if (is_subset(&t7, &t4) && is_subset(&t4, &t7)) {
-            output_set(&x);
+            printf("is solve\n");
+        } else {
+            for (int j = 1; j <= 10; ++j) {
+                if (d[j] == 1) {
+                    printf("%d ", j);
+                }
+            }
+            printf("isn't solve\n");
         }
 
-        delete_set(&x);
-        delete_set(&t5);
-        delete_set(&t6);
-        delete_set(&t7);
+        for (int j = 1; j <= 10; ++j) {
+            d[j] = 0;
+        }
     }
 }
