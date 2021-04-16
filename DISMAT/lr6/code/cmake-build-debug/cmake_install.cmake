@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/lagri/Desktop/-/DISMAT/lr5/code
+# Install script for directory: C:/Users/lagri/Desktop/-/DISMAT/lr6/code
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/lagri/Desktop/-/DISMAT/lr5/code/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/lagri/Desktop/-/DISMAT/lr6/code/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
