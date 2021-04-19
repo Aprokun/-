@@ -1,58 +1,38 @@
 #include <stdio.h>
 
-int M = 5, N = 5;
+void solve(int chocos[], int n, int i) {
+    for (int x = 0; x < n; ++x) {
 
-void input_matr(int a[][N]) {
-    for (int i = 0; i < M; ++i) {
-        for (int j = 0; j < N; ++j) {
-            scanf("%d", &a[i][j]);
-        }
     }
 }
 
-int is_avr_elem(int a[M][N], int i, int j) {
+int main() {
+    int n;
+    scanf("%d", &n);
 
-    int curr_elem = a[i][j];
-
-    //check elements before
-    for (int k = 0; k < j; ++k) {
-        int t = a[i][k];
-        if (t >= curr_elem) {
-            return 0;
-        }
+    int amount_chocolates[n];
+    for (int i = 0; i < n; ++i) {
+        scanf("%d", &amount_chocolates[i]);
     }
 
-    //check elements after
-    for (int k = j + 1; k < N; ++k) {
-        int t = a[i][k];
-        if (curr_elem >= t) {
-            return 0;
-        }
-    }
+    int bought_chocolates[n];
+    bought_chocolates[0] = amount_chocolates[0];
+    for (int i = 1; i < n; i++) {
+        bought_chocolates[i] = amount_chocolates[i];
 
-    return 1;
-}
-
-int get_amnt_avr_elems(int a[M][N]) {
-
-    int res = 0;
-
-    for (int i = 0; i < M; ++i) {
-        for (int j = 0; j < N; ++j) {
-            if (is_avr_elem(a, i, j)) {
-                res++;
+        for (int j = i - 1; j >= 0; j--) {
+            if (bought_chocolates[j] >= bought_chocolates[i]) {
+                if (bought_chocolates[j] != 0) {
+                    bought_chocolates[j] -= (bought_chocolates[j] - bought_chocolates[i]) + 1;
+                }
             }
         }
     }
 
-    return res;
-}
+    int sum = 0;
+    for (int i = 0; i < n; ++i) {
+        sum += bought_chocolates[i];
+    }
 
-int main() {
-    int a[M][N];
-
-    input_matr(a);
-
-    int res = get_amnt_avr_elems(a);
-    printf("%d", res);
+    printf("%d", sum);
 }

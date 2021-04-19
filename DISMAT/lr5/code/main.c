@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <time.h>
 
-void get_accommodations(int a[4], int n, int k);
-
 void output_arr(int a[], int n) {
     printf("{");
 
@@ -117,18 +115,18 @@ void get_accommodations(int a[4], int n, int k) {
 int main() {
     int a[] = {3, 5, 6, 9, 2};
     int b[] = {1, 2, 3, 6, 7, 8, 9, 4};
-    time_t beg, end;
+    //time_t beg, end;
 
-    beg = time(NULL);
+    //beg = time(NULL);
     //combinations
     get_combinations(a, 5, 1);
     //end combinations
-    end = time(NULL);
+    //end = time(NULL);
 
     printf("------------------------\n");
 
-    double diff = difftime(end, beg);
-    printf("затрачено: %f", diff);
+    //double diff = difftime(end, beg);
+    //printf("затрачено: %f", diff);
     printf("------------------------\n");
 
 
