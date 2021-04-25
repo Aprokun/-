@@ -8,7 +8,6 @@
 #include <stdlib.h>
 
 #define M 3 //число строк
-#define N 3 //число столбцов
 
 //возвращает 1, если в массиве а длины n слева от элемента,
 //под индексом j_elem находятся только меньшие элменты,
@@ -31,15 +30,15 @@ int is_valid(const int *a, size_t n, size_t j_elem) {
     return 1;
 }
 
-//возвращает количество элементов матрицы а размера m на N,
+//возвращает количество элементов матрицы а размера m на n,
 //у которых слева находятся только меньше элементы, а справа -
 //только большие
-int get_amount_avr_elems(int (*a)[N], size_t m) {
+int get_amount_avr_elems(int **a, size_t m, size_t n) {
     int k = 0;
 
     for (size_t i = 0; i < m; ++i) {
-        for (size_t j = 0; j < N; ++j) {
-            if (is_valid(a[i], N, j)) {
+        for (size_t j = 0; j < n; ++j) {
+            if (is_valid(a[i], n, j)) {
                 k++;
             }
         }
@@ -48,33 +47,44 @@ int get_amount_avr_elems(int (*a)[N], size_t m) {
     return k;
 }
 
-//ввод матрицы а размера m на N
-void input_matrix(int (*a)[N], size_t m) {
+//ввод матрицы а размера m на n
+void input_matrix(int **a, size_t m, size_t n) {
     for (size_t i = 0; i < m; ++i) {
-        for (size_t j = 0; j < N; ++j) {
+        for (size_t j = 0; j < n; ++j) {
             scanf("%d", &a[i][j]);
         }
     }
 }
 
-//выделяет память матрица a размера m на N
-void create_matrix(int (**a)[N], size_t m) {
-    *a = (int (*)[N])calloc(m, N * sizeof(int));
+//выделяет память матрица a размера m на n
+void create_matrix(int ***a, size_t m, size_t n) {
+    *a = (int **)calloc(m, sizeof(int *));
+    for (size_t i = 0; i < m; ++i) {
+        (*a)[i] = (int *)calloc(n, sizeof(int));
+    }
 }
 
 //освобождает память, выделенную под матрицу a
-void delete_matrix(int (*a)[N]) {
+void delete_matrix(int **a, size_t m) {
+    for (size_t i = 0; i < m; ++i) {
+        free(a[i]);
+    }
+
     free(a);
 }
 
 int main() {
-    int (*a)[N];
-    create_matrix(&a, M);
+    printf("Input number of columns\n");
+    int n;
+    scanf("%d", &n);
 
-    printf("Input matrix (%d x %d)", M, N);
-    input_matrix(a, M);
+    int **a;
+    create_matrix(&a, M, n);
 
-    int k = get_amount_avr_elems(a, M);
-    delete_matrix(a);
+    printf("Input matrix (%d x %d)\n", M, n);
+    input_matrix(a, M, n);
+
+    int k = get_amount_avr_elems(a, M, n);
+    delete_matrix(a, M);
     printf("%d", k);
 }

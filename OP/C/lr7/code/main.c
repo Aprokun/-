@@ -71,7 +71,7 @@ int main() {
     int (*a)[N];
     create_matrix(&a, M);
 
-    printf("Input matrix (%d x %d)", M, N);
+    printf("Input matrix (%d x %d)\n", M, N);
     input_matrix(a, M);
 
     int k = get_amount_avr_elems(a, M);

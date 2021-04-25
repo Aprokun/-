@@ -6,7 +6,7 @@ typedef struct data {
     char address[50];
 } person;
 
-/*возвращает "истину", если строки this и other равны, иначе - "ложь"*/
+/*возвращает "1", если строки this и other равны, иначе - "0"*/
 int is_str_equals(const char *this, const char *other) {
     while (*this != '\0' || *other != '\0') {
         if (*this != *other) {
@@ -24,18 +24,18 @@ int is_str_equals(const char *this, const char *other) {
 }
 
 /*ввод данных списка людей list размера size*/
-void fill_people_list(person list[], int size) {
-    for (int i = 0; i < size; ++i) {
+void fill_people_data(person *list, size_t size) {
+    for (size_t i = 0; i < size; ++i) {
         printf("Input: <Second name> <City> <Address>\n");
         scanf("%s %s %s", list[i].second_name, list[i].city, list[i].address);
     }
 }
 
 /*вывод людей из списка list размера size, адреса которых совпадают, а города - нет*/
-void print_people_with_sim_addr(person *list, int size) {
+void print_people_with_sim_addr(person *list, size_t size) {
     int is_empty = 1;
-    for (int i = 0; i < size - 1; ++i) {
-        for (int j = i + 1; j < size; ++j) {
+    for (size_t i = 0; i < size - 1; ++i) {
+        for (size_t j = i + 1; j < size; ++j) {
             if ((is_str_equals(list[i].address, list[j].address)) && !(is_str_equals(list[i].city, list[j].city))) {
                 printf("%s --- %s\n", list[i].second_name, list[j].second_name);
                 is_empty = 0;
@@ -53,7 +53,7 @@ int main() {
     scanf("%d", &n);
 
     person people[n];
-    fill_people_list(people, n);
+    fill_people_data(people, n);
 
     print_people_with_sim_addr(people, n);
 }

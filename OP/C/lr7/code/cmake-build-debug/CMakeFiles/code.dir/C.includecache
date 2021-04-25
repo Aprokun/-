@@ -6,7 +6,9 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/lagri/Desktop/-/OP/C/lr7/code/main.c
+C:/Users/lagri/Desktop/papka s prikolom/OP/C/lr7/code/main.c
 stdio.h
+-
+stdlib.h
 -
 
