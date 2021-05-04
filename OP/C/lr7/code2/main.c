@@ -13,18 +13,34 @@
 //под индексом j_elem находятся только меньшие элменты,
 //а справа - только большие
 int is_valid(const int *a, size_t n, size_t j_elem) {
-    //проверяем элементы, стоящие слева (если таковые есть)
-    for (size_t j = 0; j < j_elem; ++j) {
-        if (a[j] >= a[j_elem]) {
+    int curr_elem = a[j_elem];
+
+    //проверяем элементы, стоящие слева
+    size_t i = 0, j = j_elem;
+    while (i < j) {
+        if (a[i] >= curr_elem) {
             return 0;
         }
+
+        if (a[j - 1] >= curr_elem) {
+            return 0;
+        }
+
+        i++; j--;
     }
 
-    //проверяем элементы, стоящие справа (если таковые есть)
-    for (size_t j = j_elem + 1; j < n ; ++j) {
-        if (a[j] <= a[j_elem]) {
+    //проверяем элементы, стоящие справа
+    i = j_elem + 1, j = n;
+    while (i < j) {
+        if (a[i] <= curr_elem) {
             return 0;
         }
+
+        if (a[j - 1] <= curr_elem) {
+            return 0;
+        }
+
+        i++; j--;
     }
 
     return 1;
