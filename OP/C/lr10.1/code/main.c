@@ -1,82 +1,55 @@
 #include <stdio.h>
 
-/* считывает слово с файла f в буфер buf */
-void read_word(FILE *f, char *buf) {
-    char c = fgetc(f);
+/* возвращает длину строки str */
+size_t slen_(char *str) {
     size_t i = 0;
-    while (c != '\n' && c != ' ' &&  c != '\377') {
-        buf[i] = c;
-        i++;
-        c = fgetc(f);
+
+    while (*str != '\0') {
+        i++; str++;
     }
 
-    buf[i] = 0;
-}
-
-/*
- * возвращает '1', если длина слова w не больше n,
- * иначе - '0'
- */
-int is_valid_word(char *w, int n) {
-    size_t c = 0;
-
-    while (*w != '\0' && c < n) {
-        c++; w++;
-    }
-
-    if (c == n) {
-        return 0;
-    } else {
-        return 1;
-    }
-}
-
-/* очищает буфер buf длины buf_len */
-void clear_buf(char buf[], size_t buf_len) {
-    for (size_t i = 0; i < buf_len; ++i) {
-        buf[i] = 0;
-    }
-}
-
-/*
- * закрывает для чтения, а затем удаляет файл inp;
- * переименовывает файл с именем out_file_name на inp_file_name (имя входного файла);
- * закрывает файл out для записи;
- */
-void close_files(FILE *inp, char *inp_file_name, FILE *out, char *out_file_name) {
-    fclose(inp);
-    fclose(out);
-
-    rename(out_file_name, inp_file_name);
-    remove(inp_file_name);
+    return i;
 }
 
 /*
  * удаляет слова из файла с именем file_name, длина
  * которых превышает (или равна) n
  */
-void delete_words_from(char *file_name, int n) {
-    FILE *inp = fopen(file_name, "r");
-    FILE *out = fopen("output.txt", "w");
+void delete_words_from(char *file_name, size_t n) {
+    FILE *inp_r = fopen(file_name, "r"),
+         *inp_w = fopen(file_name, "r+");
     size_t buf_len = 256;
+    long r;
 
+    fseek(inp_r, 0, SEEK_END);
+    int file_size = ftell(inp_r);
+    fseek(inp_r, 0, SEEK_SET);
 
-    if (inp != NULL) {
-        while (feof(inp) == 0) {
+    if (inp_r != NULL) {
+        while (feof(inp_r) == 0) {
+
             char buf[buf_len];
-            read_word(inp, buf);
-            
-            if (is_valid_word(buf, n)) {
-                fprintf(out, "%s ", buf);
+            fscanf(inp_r, "%s", buf);
+
+            long word_len = slen_(buf);
+
+            if (word_len < n) {
+                fprintf(inp_w, "%s ", buf);
+                r = ftell(inp_w);
             }
-            
-            clear_buf(buf, buf_len);
+        }
+
+
+        while (r < file_size) {
+            fputc(' ', inp_w);
+            r++;
         }
     } else {
         perror("A file with this name wasn't found");
     }
 
-    close_files(inp, file_name, out, "output.txt");
+    fclose(inp_r);
+    fclose(inp_w);
 }
 
 int main() {
@@ -85,8 +58,8 @@ int main() {
     scanf("%s", file_name);
 
     printf("Input number\n");
-    int n;
-    scanf("%d", &n);
+    size_t n;
+    scanf("%u", &n);
 
     delete_words_from(file_name, n);
 

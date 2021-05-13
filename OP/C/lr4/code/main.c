@@ -7,73 +7,89 @@
  */
 
 #include <stdio.h>
-#include <math.h>
 
-/* считывает вещественные числа из потока ввода и
-    выводит их с тремя знаками после точки. */
-void print_nums_from()
-{
-    int sign, psign, k, p, i = 0;
-    double num;
-    char c;
-    char str[255];
+/* возведение 10 в степень p */
+float powf_(int p) {
+    float f = 1;
 
-    gets(str);
+    if (p > 0)
+        while (p != 0) {
+            --p;
+            f *= 10;
+        }
+    else
+        while (p != 0) {
+            ++p;
+            f /= 10;
+        }
 
-    while (str[i] != '\0')
-    {
-        sign = 1, psign = 1,
-        k = 0, p = 0, num = 0;
+    return f;
+}
 
-        while (str[i] == ' ' || str[i] == ',') i++;
+/* возвращает извлечённое вещественное число из потока ввода */
+float stof() {
+    char c = getchar();
 
-        if (str[i] == '-')
-        {
+    if (c != '\n' && c != '\0') {
+        while ((c <= ' ') && (c > '\0'))
+            c = getchar();;
+
+        int sign = 1;
+
+        if (c == '-') {
             sign = -1;
-            i++;
-        }
-        else if (str[i] == '+')
-            i++;
+            c = getchar();
+        } else if (c == '+')
+            c = getchar();
 
-        while (str[i] >= '0' && str[i] <= '9')
-        {
-            num = num * 10 + (str[i] - '0');
-            i++;
+        int a = 0;
+
+        while ((c >= '0') && (c <= '9')) {
+            a = a * 10 + (c - '0');
+            c = getchar();
         }
 
-        if (str[i] == '.') {
-            i++;
-            while ((str[i] >= '0') && (str[i] <= '9')) {
+        int k = 0;
+
+        if (c == '.') {
+            c = getchar();
+            while ((c >= '0') && (c <= '9')) {
                 ++k;
-                num = num * 10 + str[i] - '0';
-                i++;
+                a = a * 10 + c - '0';
+                c = getchar();
             }
         }
 
-        if ((str[i] == 'e') || (str[i] == 'E')) {
-            i++;
+        int p = 0;
 
-            if (str[i] == '-') {
-                psign = -1;
-                i++;
+        if ((c == 'e') || (c == 'E')) {
+            c = getchar();
+
+            while ((c >= '0') && (c <= '9')) {
+                p = p * 10 + c - '0';
+                c = getchar();
             }
-
-            while ((str[i] >= '0') && (str[i] <= '9')) {
-                p = p * 10 + str[i] - '0';
-                i++;
-            }
-
-            p *= psign;
         }
 
         int l = p - k;
 
         if (l < 0)
-            num = (num * sign) / pow(10, -l);
+            return ((a * sign) / powf_(-l));
         else
-            num = num * sign * pow(10, l);
+            return (a * sign * powf_(l));
+    } else {
+        return EOF;
+    }
+}
 
-        printf("%.3lf ", num);
+/* считывает вещественные числа из потока ввода и
+    выводит их с тремя знаками после точки */
+void print_nums_from()
+{
+    double num;
+
+    while ((num = stof()) != EOF) {
+        printf("%.3f\n", num);
     }
 }
 
